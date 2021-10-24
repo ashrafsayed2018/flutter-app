@@ -9,5 +9,5 @@ const String homeRoute = "home";
 
 // auth
 
-const String signInPage = 'signIn';
-const String signUpPage = 'signUp';
+const String signInRoute = 'signIn';
+const String signUpRoute = 'signUp';

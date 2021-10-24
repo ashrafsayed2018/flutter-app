@@ -1,25 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:forsale/router/router_constants.dart';
-import 'package:forsale/screens/home_screen.dart';
-import 'router/route_generator.dart';
+import 'package:forsale/application/repositories/auth_repository.dart';
+import 'package:forsale/application/state/auth_state.dart';
+import 'package:forsale/application/storage/localstorage.dart';
+import 'package:forsale/application/storage/storage_keys.dart';
+import 'package:forsale/values/branding_color.dart';
+import 'package:states_rebuilder/states_rebuilder.dart';
+import './router/router_constants.dart';
+import './router/route_generator.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalStorage.initializeSharedPrefrences();
   runApp(const Forsale());
 }
 
 class Forsale extends StatelessWidget {
   const Forsale({Key? key}) : super(key: key);
 
+  // rgb(7, 94, 84)
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: '4Sale',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      initialRoute: homeRoute,
-      onGenerateRoute: RouteGenerator().generateRoute,
-    );
+    return Injector(
+        inject: [Inject<AuthState>(() => AuthState(AuthRepositoryImp()))],
+        builder: (context) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: '4Sale',
+            theme: ThemeData(
+              primarySwatch: brandingColor,
+            ),
+            initialRoute:
+                LocalStorage.getItem(token) != null ? homeRoute : signInRoute,
+            onGenerateRoute: RouteGenerator().generateRoute,
+          );
+        });
   }
 }

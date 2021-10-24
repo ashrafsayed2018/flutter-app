@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:forsale/application/storage/localstorage.dart';
 import 'package:forsale/screens/apportunities/apportunity_screen.dart';
 import 'package:forsale/screens/auth/account_page.dart';
 import 'package:forsale/screens/favorities_page.dart';
 import 'package:forsale/screens/question_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -34,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // print(LocalStorage.getItem('token'));
     return Scaffold(
       body: PageView(
         children: _screens,
