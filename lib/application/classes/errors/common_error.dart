@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class CommonError extends Error {
   final String? message;
@@ -17,13 +18,17 @@ showNetworkErrors(DioError networkError) {
     } else if (networkError.response!.statusCode == 422) {
       // unproccessable entity
 
-      Map<String, dynamic> validationErrors = networkError.response!.data;
+      if (networkError.response!.data is String) {
+        throw Exception('not authorized');
+      } else {
+        Map<String, dynamic> validationErrors = networkError.response!.data;
+        for (var err in validationErrors.values) {
+          message = "\n$err";
+        }
+      }
 
       //loop through the validation errors
 
-      for (var err in validationErrors.values) {
-        message = "\n$err";
-      }
     } else {
       message += "somthing wrong is accured";
     }

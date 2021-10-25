@@ -10,6 +10,10 @@ class LocalStorage {
     initializeSharedPrefrences();
   }
 
+  factory LocalStorage() {
+    return _singleton;
+  }
+
   static Future<void> initializeSharedPrefrences() async {
     _sharedPreferences = await SharedPreferences.getInstance();
   }

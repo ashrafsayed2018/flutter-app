@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:forsale/application/repositories/apportunity_repository.dart';
 import 'package:forsale/application/repositories/auth_repository.dart';
+import 'package:forsale/application/state/apportunity_state.dart';
 import 'package:forsale/application/state/auth_state.dart';
 import 'package:forsale/application/storage/localstorage.dart';
 import 'package:forsale/application/storage/storage_keys.dart';
@@ -22,7 +24,14 @@ class Forsale extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Injector(
-        inject: [Inject<AuthState>(() => AuthState(AuthRepositoryImp()))],
+        inject: [
+          Inject<AuthState>(
+            () => AuthState(AuthRepositoryImp()),
+          ),
+          Inject<ApportunityState>(
+            () => ApportunityState(ApportunityRepositoryImpl()),
+          ),
+        ],
         builder: (context) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
