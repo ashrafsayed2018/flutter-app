@@ -3,12 +3,8 @@ import 'package:forsale/application/classes/forum/comment.dart';
 
 class Question {
   final String? question;
-  final Object? createdBy;
+  final User? createdBy;
   final List<Comment>? comments;
-  Question.fromJson(Map<String, dynamic> jsonMap)
-      : question = jsonMap['question'] ?? "",
-        createdBy = User.fromJson(jsonMap['createdBy']),
-        comments = _getComments(jsonMap['comments']);
 
   static _getComments(List<dynamic> comments) {
     return comments
@@ -17,4 +13,10 @@ class Question {
         )
         .toList();
   }
+
+  // create factory of question class
+  Question.fromJson(Map<String, dynamic> jsonMap)
+      : question = jsonMap['question'] ?? "",
+        createdBy = User.fromJson(jsonMap['createdBy']),
+        comments = _getComments(jsonMap['comments']);
 }

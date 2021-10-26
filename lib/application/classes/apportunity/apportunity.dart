@@ -11,6 +11,8 @@ class Apportunity {
   final User? createdBy;
   final ApportunityDetail? apportunityDetail;
 
+  // create factory of Apportunity class
+
   Apportunity.fromJson(Map<String, dynamic> jsonMap)
       : id = jsonMap['id'] ?? 0,
         title = jsonMap['title'] ?? "",

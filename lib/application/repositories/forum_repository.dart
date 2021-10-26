@@ -17,10 +17,12 @@ class ForumRepositoryImpl implements ForumRepository {
   @override
   Future<Questions> getAllQuestions(int? page) async {
     try {
-      final response = await ForsaleApi.dio.get("api/apportunity?page=$page",
-          options: Options(headers: {
-            'Authorization': "Bearer ${LocalStorage.getItem(token)}"
-          }));
+      final response = await ForsaleApi.dio.get(
+        "api/questions?page=$page",
+        options: Options(
+          headers: {'Authorization': "Bearer ${LocalStorage.getItem(token)}"},
+        ),
+      );
 
       List _data = response.data['data'];
       // the meta for pagination the pages and the current and last page

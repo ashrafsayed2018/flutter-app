@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:forsale/application/repositories/apportunity_repository.dart';
 import 'package:forsale/application/repositories/auth_repository.dart';
+import 'package:forsale/application/repositories/forum_repository.dart';
 import 'package:forsale/application/state/apportunity_state.dart';
 import 'package:forsale/application/state/auth_state.dart';
+import 'package:forsale/application/state/forum_state.dart';
 import 'package:forsale/application/storage/localstorage.dart';
 import 'package:forsale/application/storage/storage_keys.dart';
 import 'package:forsale/values/branding_color.dart';
@@ -28,6 +30,9 @@ class Forsale extends StatelessWidget {
           ),
           Inject<ApportunityState>(
             () => ApportunityState(ApportunityRepositoryImpl()),
+          ),
+          Inject<ForumSate>(
+            () => ForumSate(ForumRepositoryImpl()),
           ),
         ],
         builder: (context) {

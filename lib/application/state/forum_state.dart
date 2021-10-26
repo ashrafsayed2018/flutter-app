@@ -2,7 +2,6 @@ import 'package:forsale/application/classes/common/pagination.dart';
 import 'package:forsale/application/classes/forum/question.dart';
 import 'package:forsale/application/classes/forum/questions.dart';
 import 'package:forsale/application/repositories/forum_repository.dart';
-import 'package:forsale/utils/helper.dart';
 
 class ForumSate {
   final ForumRepository _forumRepository;
@@ -10,7 +9,7 @@ class ForumSate {
   ForumSate(this._forumRepository);
 
   List<Question> _questions = [];
-  List<Question> get apportunities => _questions;
+  List<Question> get questions => _questions;
 
   Pagination? _pagination;
 

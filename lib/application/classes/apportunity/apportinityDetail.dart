@@ -7,7 +7,7 @@ class ApportunityDetail {
       endDate,
       officialLinks,
       eligibleRegions;
-
+  // create factory of ApportunityDetail class
   ApportunityDetail.fromJson(Map<String, dynamic> jsonMap)
       : benefits = jsonMap['benefits'] ?? "",
         applicationProcess = jsonMap['applicationProcess'] ?? "",
