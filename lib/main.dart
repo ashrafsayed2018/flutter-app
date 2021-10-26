@@ -19,8 +19,6 @@ void main() async {
 class Forsale extends StatelessWidget {
   const Forsale({Key? key}) : super(key: key);
 
-  // rgb(7, 94, 84)
-
   @override
   Widget build(BuildContext context) {
     return Injector(
@@ -37,6 +35,7 @@ class Forsale extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: '4Sale',
             theme: ThemeData(
+              fontFamily: "Dosis",
               primarySwatch: brandingColor,
             ),
             initialRoute:

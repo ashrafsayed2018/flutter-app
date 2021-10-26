@@ -1,38 +1,36 @@
 import 'package:dio/dio.dart';
-import 'package:forsale/application/classes/apportunity/apportunities.dart';
-import 'package:forsale/application/classes/apportunity/apportunity.dart';
 import 'package:forsale/application/classes/common/pagination.dart';
 import 'package:forsale/application/classes/errors/common_error.dart';
+import 'package:forsale/application/classes/forum/question.dart';
+import 'package:forsale/application/classes/forum/questions.dart';
 import 'package:forsale/application/forsale_api.dart';
 import 'package:forsale/application/storage/localstorage.dart';
 import 'package:forsale/application/storage/storage_keys.dart';
 
-abstract class ApportunityRepository {
-  // fetch the list of  apportunities
+abstract class ForumRepository {
+  // fetsh the questions from the server
 
-  Future<Apportunities> getAllApportunities(int? page);
+  Future<Questions> getAllQuestions(int? page);
 }
 
-class ApportunityRepositoryImpl implements ApportunityRepository {
+class ForumRepositoryImpl implements ForumRepository {
   @override
-  Future<Apportunities> getAllApportunities(int? page) async {
+  Future<Questions> getAllQuestions(int? page) async {
     try {
       final response = await ForsaleApi.dio.get("api/apportunity?page=$page",
           options: Options(headers: {
             'Authorization': "Bearer ${LocalStorage.getItem(token)}"
           }));
 
-      List _temp = response.data['data'];
+      List _data = response.data['data'];
       // the meta for pagination the pages and the current and last page
 
       var _meta = response.data['meta'];
       Pagination pagination = Pagination.fromJson(_meta);
 
-      List<Apportunity> _apportunities = _temp
-          .map((apportuinity) => Apportunity.fromJson(apportuinity))
-          .toList();
-      return Apportunities(
-          pagination: pagination, apportunities: _apportunities);
+      List<Question> _questions =
+          _data.map((question) => Question.fromJson(question)).toList();
+      return Questions(pagination: pagination, questions: _questions);
     } on DioError catch (error) {
       throw showNetworkErrors(error);
     }

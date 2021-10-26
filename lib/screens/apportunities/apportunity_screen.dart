@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:forsale/application/state/apportunity_state.dart';
+import 'package:forsale/router/router_constants.dart';
+import 'package:forsale/screens/apportunities/apportunity_detail.dart';
 import 'package:forsale/values/images.dart';
+import 'package:forsale/widgets/apportunity_links.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
 class ApportunitiesScreen extends StatefulWidget {
@@ -13,31 +16,53 @@ class ApportunitiesScreen extends StatefulWidget {
 class _ApportunitiesScreenState extends State<ApportunitiesScreen> {
   final _apportunityStateRM = RM.get<ApportunityState>();
 
+  // scroll page when we reach the end of the screen
+  ScrollController? _scrollController;
+
   @override
-  void initState() {
+  void didChangeDependencies() {
+    _scrollController = ScrollController();
+    _scrollController!.addListener(() {
+      double scrollvalue = _scrollController!.position.pixels;
+      double screenHeigh = _scrollController!.position.maxScrollExtent;
+
+      if (scrollvalue >= screenHeigh && !_apportunityStateRM.state.loading) {
+        _getNewApportunities();
+      }
+    });
+    // }
+
+    _getNewApportunities();
+    super.didChangeDependencies();
+  }
+
+  void _getNewApportunities() {
     _apportunityStateRM.setState((state) => state.getAllApportunities());
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    TextStyle _iconTextStyle = const TextStyle(
-      fontFamily: "Dosis",
-      fontSize: 16,
-      fontWeight: FontWeight.w600,
-    );
-    double iconSize = 16;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Apportunity page"),
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: StateBuilder<ApportunityState>(
           observe: () => _apportunityStateRM,
           builder: (_, model) {
             return Column(
               children: [
-                ...model.state.apportunities.map((apportunity) => Column(
+                ...model.state.apportunities.map(
+                  (apportunity) => GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        approtunityDetail,
+                        arguments: apportunity,
+                      );
+                    },
+                    child: Column(
                       children: [
                         Image.asset(Images.logo),
                         Container(
@@ -48,82 +73,15 @@ class _ApportunitiesScreenState extends State<ApportunitiesScreen> {
                                   fontFamily: "Dosis",
                                   fontWeight: FontWeight.w600)),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.school,
-                                    size: iconSize,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  "scoolarship",
-                                  style: _iconTextStyle,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.remove_red_eye,
-                                  size: iconSize,
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  '123',
-                                  style: _iconTextStyle,
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.share,
-                                    size: iconSize,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  "share",
-                                  style: _iconTextStyle,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.event,
-                                    size: iconSize,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  "${apportunity.deadline}",
-                                  style: _iconTextStyle,
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
+                        ApportunityLinks(
+                          categoryName: apportunity.category!.name,
+                          views: apportunity.id.toString(),
+                          deadline: apportunity.deadline,
+                        ),
                       ],
-                    ))
+                    ),
+                  ),
+                )
               ],
             );
           },
